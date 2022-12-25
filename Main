@@ -1,0 +1,110 @@
+# Import the usual suspects
+import numpy as np
+import matplotlib.pylab as plt
+
+# Our function to decide if an atom has decayed or not.
+def does_it_decay(prob=0.2):
+  test = np.random.random()
+  if test<=prob:
+    return True
+  else:
+    return False
+    
+# Make an array of 1000 ones for our isotopes
+isotopes = np.ones(1000)
+
+N = []
+N.append(sum(isotopes))
+
+prob_thor = 1 - 2**(-1/18.68)
+prob_rad = 1 - 2**(-1/11.43)
+print(prob_thor)
+print(prob_rad)
+
+tfinal = 80 # Years
+tsteps = 1 # This is what we used to calculate the probability
+
+# We'll use this to keep track of the time passed
+xpts = []
+xpts.append(0)
+
+thor = np.ones(1000)
+rad = []
+lead = []
+
+num_thor = []
+num_rad = []
+num_lead = []
+
+num_thor.append(sum(isotopes))
+num_rad.append(0)
+num_lead.append(0)
+
+# For our loop we're going in steps of 100 years.
+for t in np.arange(0,tfinal,tsteps):
+
+  xpts.append(t)
+  
+  for i in range(len(thor)):
+    
+    if thor[i] == 1: # Meaning it did not decay yet
+      if does_it_decay(prob_thor)==True:
+        thor[i] = 0
+        rad.append(1)
+
+  for i in range(len(rad)):
+    
+    if rad[i] == 1: # Meaning it did not decay yet
+      if does_it_decay(prob_rad)==True:
+        rad[i] = 0
+        lead.append(1)
+
+  
+  num_thor.append(sum(thor))
+  num_rad.append(sum(rad))
+  num_lead.append(sum(lead))
+
+
+plt.figure(figsize=(8,4))
+plt.plot(xpts,num_thor,"o",label=r'$Thorium$')
+plt.plot(xpts,num_rad,"o",label=r'$Radian$')
+plt.plot(xpts,num_lead,"o",label=r'$Lead$')
+plt.xlabel('Time (years)')
+plt.ylabel('# of atoms')
+plt.legend()
+
+# After 10 years
+nlead = num_lead[10]
+nrad = num_rad[10]
+nthor = num_thor[10]
+
+print("After 10 years, the ratio of lead/thorium is {0:.2f}".format(nlead/nthor))
+print("After 10 years, the ratio of radium/thorium is {0:.2f}".format(nrad/nthor))
+print()
+
+# After 20 years
+nlead = num_lead[20]
+nrad = num_rad[20]
+nthor = num_thor[20]
+
+print("After 20 years, the ratio of lead/thorium is {0:.2f}".format(nlead/nthor))
+print("After 20 years, the ratio of radium/thorium is {0:.2f}".format(nrad/nthor))
+print()
+
+# After 40 years
+nlead = num_lead[40]
+nrad = num_rad[40]
+nthor = num_thor[40]
+
+print("After 40 years, the ratio of lead/thorium is {0:.2f}".format(nlead/nthor))
+print("After 40 years, the ratio of radium/thorium is {0:.2f}".format(nrad/nthor))
+print()
+
+# After 70 years
+nlead = num_lead[70]
+nrad = num_rad[70]
+nthor = num_thor[70]
+
+print("After 70 years, the ratio of lead/thorium is {0:.2f}".format(nlead/nthor))
+print("After 70 years, the ratio of radium/thorium is {0:.2f}".format(nrad/nthor))
+print()
